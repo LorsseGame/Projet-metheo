@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css">
+    <title>Metheo</title>
+</head>
+
+<body>
+    <div class="search-box">
+        <input type="text" class="search-input" id="search-input" placeholder="Recherchez ici!">
+        <div class="suggestions" id="suggestions"></div>
+    </div>
+
+    <button id="search-button">Search</button>
+
+    <div id="mapid" style="width: 600px; height: 400px;"></div>
+
+
+</body>
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
+<script src="search.js"></script>
+<script src="map.js"></script>
+<script src="caard.js"></script>
+
+
+</html>
