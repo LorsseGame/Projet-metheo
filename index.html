@@ -12,14 +12,47 @@
 </head>
 
 <body>
-    <div class="search-box">
-        <input type="text" class="search-input" id="search-input" placeholder="Recherchez ici!">
-        <div class="suggestions" id="suggestions"></div>
+
+    <header>
+        <div class="container-header">
+            <div class="info-header">
+                <img src="images/Thermometer.png" class="img-icon" alt="icon-header">
+                <h1 class="titre-app">Météo App</h1>
+            </div>
+
+            <div class="search-box">
+                <input type="text" class="search-input" id="search-input" placeholder="Recherchez ici!">
+                <div class="suggestions" id="suggestions"></div>
+                <button class="search-button" id="search-button">Search</button>
+            </div>
+        </div>
+    </header>
+
+    <div class="container-map">
+        <p id="p-info">Pour afficher la météo d’une ville, rechercher la grâce au champs de recherche !</p>
+        <div class="caard-meteo" id="caard-meteo" style="display: none;">
+            <div class="info-caard">
+                <h2 id="ville-caard"></h2>
+                <p id="date-caard"></p>
+            </div>
+            <img src="" id="img-weather" alt="">
+            <h3 id="temperature-caard"></h3>
+            <h3 id="weather-caard"></h3>
+            <div class="info-sup-caard">
+                <img src="" id="icon-wind-caard" alt="">
+                <p id="p-wind-caard"></p>
+            </div> 
+            <div class="info-sup-caard">
+                <img src="" id="icon-precipitation-caard" alt="">
+                <p id="p-precipitation-caard">rrrr</p>
+            </div>
+            <div class="info-sup-caard">
+                <img src="" id="icon-humidity-caard" alt="">
+                <p id="p-humidity-caard"></p>
+            </div>
+        </div>
+        <div id="mapid"></div>
     </div>
-
-    <button id="search-button">Search</button>
-
-    <div id="mapid" style="width: 600px; height: 400px;"></div>
 
 
 </body>

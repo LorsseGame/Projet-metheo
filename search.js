@@ -25,7 +25,6 @@ async function obtenirVille() {
 // Fonction pour afficher les suggestions
 async function showSuggestions(inputValue) {
   const suggestionsData = await obtenirVille();
-  console.log(suggestionsData);
   const suggestionsContainer = document.getElementById("suggestions");
   suggestionsContainer.innerHTML = "";
 
@@ -73,6 +72,8 @@ search.addEventListener(
 
 button.addEventListener("click", () => {
   obtenirCoordonnees();
+  setTimeout(ajoueMarquer, 300);
+  setTimeout(obtenirMeteo, 500);
 });
 
 async function obtenirCoordonnees() {
@@ -95,24 +96,23 @@ async function obtenirCoordonnees() {
           tabCoordonnees.push({
             label: data.features[i].properties.label,
             x: data.features[i].geometry.coordinates[0],
-            y: data.features[i].geometry.coordinates[1],
+            y: data.features[i].geometry.coordinates[1]
           });
         }
-        console.log(tabCoordonnees);
-      }else{
+        localStorage.setItem("coordonnees", JSON.stringify(tabCoordonnees));
+        console.log(localStorage.getItem("coordonnees"));
+      } else {
         const coordonnees = {
+          label: data.features[i].properties.label,
           x: data.features[0].geometry.coordinates[0],
-          y: data.features[0].geometry.coordinates[1],
+          y: data.features[0].geometry.coordinates[1]
         };
-        console.log("passage dans le else");
-      console.log(localStorage.setItem("coordonnees", JSON.stringify(coordonnees)));
+        localStorage.setItem("coordonnees", JSON.stringify(coordonnees))
       }
 
 
     } catch (error) {
       console.error("Erreur lors de la requête :", error);
     }
-  } else {
-    console.log("Requête API échouée");
   }
 }

@@ -3,8 +3,8 @@ body {
 }
 .search-box {
     position: relative;
+    display: flex;
     width: 300px;
-    margin: 0 auto;
 }
 .search-input {
     width: 100%;
@@ -30,4 +30,79 @@ body {
 }
 .suggestion-item:hover {
     background-color: #e0e0e0;
+}
+
+.container-header{
+    display: flex;
+    justify-content: space-between;
+    margin:  0 4vw;
+}
+.info-header{
+    display: flex;
+    align-items: center;
+}
+
+.titre-app{
+    font-size: 30px;
+    color: #23A3EA;
+}
+
+.container-map{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10vw;
+}
+
+#p-info{
+    width: 10%;
+    font-size: 20px;
+    color: #23A3EA;
+    margin-right: 5vw;
+}
+
+.caard-meteo{
+    display: flex;
+    text-align: center;
+}
+.info-caard{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 2.5vw;
+}
+.info-sup-caard{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#icon-wind-caard,
+#icon-precipitation-caard,
+#icon-humidity-caard{
+    width: 50px;
+    height: 50px;
+}
+.caard-meteo{
+    background-color: #23A3EA;
+    color: white;
+    border-radius: 0.8vw;
+    height:30vw;
+    width: 18vw;
+    margin-right: 4vw;
+}
+
+#mapid{
+    width: 50vw;
+    height:30vw;
+}
+#img-weather{
+    width: 7vw;
+    height: 7vw;
+}
+#ville-caard{
+    font-size: 35px;
+}
+#temperature-caard{
+    font-size: 35px;
 }
