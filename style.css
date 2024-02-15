@@ -1,108 +1,132 @@
 body {
-    font-family: Arial, sans-serif;
+  font-family: Montserrat;
 }
 .search-box {
-    position: relative;
-    display: flex;
-    width: 300px;
+  position: relative;
+  display: flex;
+  width: 300px;
 }
 .search-input {
-    width: 100%;
-    padding: 10px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+  width: 70%;
+  font-size: 16px;
+  border-radius: 6px;
+  text-align: center;
+  border: none;
+  background-color: #f0f0f0;
+  height: 4vw;
+}
+.search-button {
+  background-color: #2c8dff;
+  height: 4vw;
+  width: 4vw;
+  border: none;
+  border-radius: 6px;
+  margin-left: 1vw;
 }
 .suggestions {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    width: 100%;
-    background-color: #f9f9f9;
-    border: 1px solid #ccc;
-    border-top: none;
-    border-radius: 0 0 5px 5px;
-    display: none;
+  position: absolute;
+  top: 85%;
+  left: 0;
+  width: 70%;
+  background-color: #f9f9f9;
+  border: 1px solid #ccc;
+  border-top: none;
+  border-radius: 0 0 5px 5px;
+  display: none;
+  z-index: 1;
 }
 .suggestion-item {
-    padding: 10px;
-    cursor: pointer;
+  padding: 10px;
+  cursor: pointer;
 }
 .suggestion-item:hover {
-    background-color: #e0e0e0;
+  background-color: #e0e0e0;
 }
 
-.container-header{
-    display: flex;
-    justify-content: space-between;
-    margin:  0 4vw;
+.container-header {
+  display: flex;
+  justify-content: space-between;
+  margin: 0 4vw;
 }
-.info-header{
-    display: flex;
-    align-items: center;
-}
-
-.titre-app{
-    font-size: 30px;
-    color: #23A3EA;
+.info-header {
+  display: flex;
+  align-items: center;
 }
 
-.container-map{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 10vw;
+.titre-app {
+  font-size: 30px;
+  color: #23a3ea;
 }
 
-#p-info{
-    width: 10%;
-    font-size: 20px;
-    color: #23A3EA;
-    margin-right: 5vw;
+.container-map {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 5vw;
 }
 
-.caard-meteo{
-    display: flex;
-    text-align: center;
+#p-info {
+  width: 10%;
+  font-size: 20px;
+  color: #23a3ea;
+  margin-right: 5vw;
 }
-.info-caard{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin: 0 2.5vw;
+
+.caard-meteo {
+  display: flex;
+  text-align: center;
+  background-color: #23a3ea;
+  color: white;
+  border-radius: 0.8vw;
+  width: 20vw;
+  margin-right: 4vw;
+  padding-bottom: 2vw;
+  transition: opacity 1s linear;
 }
-.info-sup-caard{
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.visible {
+  opacity: 1;
+}
+.info-caard {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 1.5vw;
+}
+.info-sup-caard {
+  display: flex;
+  margin-left: 2vw;
+  align-items: center;
 }
 
 #icon-wind-caard,
 #icon-precipitation-caard,
-#icon-humidity-caard{
-    width: 50px;
-    height: 50px;
-}
-.caard-meteo{
-    background-color: #23A3EA;
-    color: white;
-    border-radius: 0.8vw;
-    height:30vw;
-    width: 18vw;
-    margin-right: 4vw;
+#icon-humidity-caard {
+  width: 30px;
+  height: 30px;
+  margin-right: 1vw;
 }
 
-#mapid{
-    width: 50vw;
-    height:30vw;
+#mapid {
+  width: 55vw;
+  height: 35vw;
+  z-index: 0;
 }
-#img-weather{
-    width: 7vw;
-    height: 7vw;
+#img-weather {
+  width: 7vw;
+  height: 7vw;
 }
-#ville-caard{
-    font-size: 35px;
+#ville-caard {
+  font-size: 35px;
 }
-#temperature-caard{
-    font-size: 35px;
+#temperature-caard {
+  font-size: 35px;
+  font-weight: 700;
+  font-family: Montserrat;
+}
+
+.p-copyright {
+  text-align: center;
+  margin-top: 2vw;
+  font-size: 20px;
+  color: #7d7d7d;
 }

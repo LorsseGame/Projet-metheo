@@ -12,7 +12,12 @@ async function obtenirVille() {
         throw new Error(`Erreur HTTP : ${response.status}`);
       }
       const data = await response.json();
-      return data.features.map((feature) => feature.properties.city);
+      return data.features.map((feature) => {
+        return {
+          city: feature.properties.city,
+          postcode: feature.properties.postcode,
+        };
+      });
     } catch (error) {
       console.error("Erreur lors de la requête :", error);
       return []; // En cas d'erreur, renvoyer un tableau vide
@@ -27,19 +32,18 @@ async function showSuggestions(inputValue) {
   const suggestionsData = await obtenirVille();
   const suggestionsContainer = document.getElementById("suggestions");
   suggestionsContainer.innerHTML = "";
-
   if (inputValue.length >= 3 && suggestionsData.length > 0) {
+    // Filtrer les suggestions
     const filteredSuggestions = suggestionsData.filter((suggestion) =>
-      suggestion.toLowerCase().startsWith(inputValue.toLowerCase())
+      suggestion.city.toLowerCase().startsWith(inputValue.toLowerCase())
     );
-
     // Afficher les suggestions filtrées
     filteredSuggestions.forEach((suggestion) => {
       const suggestionItem = document.createElement("div");
       suggestionItem.classList.add("suggestion-item");
-      suggestionItem.textContent = suggestion;
+      suggestionItem.textContent = suggestion.city + " " + suggestion.postcode;
       suggestionItem.addEventListener("click", () => {
-        document.querySelector(".search-input").value = suggestion;
+        document.querySelector(".search-input").value = suggestion.city;
         suggestionsContainer.style.display = "none";
       });
       suggestionsContainer.appendChild(suggestionItem);
@@ -69,16 +73,37 @@ search.addEventListener(
     showSuggestions(e.target.value);
   }, 500)
 );
+// Écouter l'événement click
+button.addEventListener("click", async () => {
+  const inputSearch = document.getElementById("search-input").value;
+  
+  // Vérifier si le champ d'entrée n'est pas vide
+  if (inputSearch.trim().length >= 3) {
+    const coordonnees = await obtenirCoordonnees();
+    
+    // Vérifier si les coordonnées sont disponibles
+    if (coordonnees.length > 0) {
+      localStorage.setItem("coordonnees", JSON.stringify(coordonnees));
+    }
 
-button.addEventListener("click", () => {
-  obtenirCoordonnees();
-  setTimeout(ajoueMarquer, 300);
-  setTimeout(obtenirMeteo, 500);
+    setTimeout(obtenirMeteo, 50);
+    setTimeout(ajoueMarquer, 150);
+    console.log("marqueurs ajoutés");
+    console.log(localStorage.getItem("coordonnees"));
+  } else {
+    // Gérer le cas où le champ d'entrée est vide
+    console.log("Le champ d'entrée est vide.");
+  }
+  setTimeout(obtenirMeteo, 50);
+  setTimeout(ajoueMarquer, 150);
+  console.log("marqueurs ajoutés");
+  console.log(localStorage.getItem("coordonnees"));
 });
 
-async function obtenirCoordonnees() {
+// Fonction pour obtenir les coordonnées de la ville
+async function obtenirCoordonnees(response) {
   const inputSearch = document.getElementById("search-input").value;
-  const url = `https://api-adresse.data.gouv.fr/search/?q=${inputSearch}&type=municipality&autocomplete=1`;
+  const url = `https://api-adresse.data.gouv.fr/search/?q=${inputSearch || response}&type=municipality&autocomplete=1`;
   if (inputSearch.length >= 3) {
     try {
       const response = await fetch(url);
@@ -88,29 +113,38 @@ async function obtenirCoordonnees() {
 
       const data = await response.json();
 
-      console.log("il y a :" + data.features.length)
+      console.log("il y a :" + data.features.length);
       if (data.features.length > 1) {
         const tabCoordonnees = [];
-
+        console.log(data);
         for (let i = 0; i < data.features.length; i++) {
           tabCoordonnees.push({
             label: data.features[i].properties.label,
             x: data.features[i].geometry.coordinates[0],
-            y: data.features[i].geometry.coordinates[1]
+            y: data.features[i].geometry.coordinates[1],
           });
         }
-        localStorage.setItem("coordonnees", JSON.stringify(tabCoordonnees));
-        console.log(localStorage.getItem("coordonnees"));
+        // Stocker toutes les coordonnées dans le localStorage uniquement si le localStorage est vide
+        console.log("local = " + localStorage.getItem("coordonnees"));
+        console.log("input = " + inputSearch);
+        console.log("response = " + response);
+        if (
+          !localStorage.getItem("coordonnees") &&
+          inputSearch != "" &&
+          response.length == 0
+        ) {
+          console.log("je suis dans le if");
+          localStorage.setItem("coordonnees", JSON.stringify(tabCoordonnees));
+        }
+        return tabCoordonnees;
       } else {
         const coordonnees = {
           label: data.features[i].properties.label,
           x: data.features[0].geometry.coordinates[0],
-          y: data.features[0].geometry.coordinates[1]
+          y: data.features[0].geometry.coordinates[1],
         };
-        localStorage.setItem("coordonnees", JSON.stringify(coordonnees))
+        localStorage.setItem("coordonnees", JSON.stringify(coordonnees));
       }
-
-
     } catch (error) {
       console.error("Erreur lors de la requête :", error);
     }
