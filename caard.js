@@ -1,18 +1,17 @@
 const cleApi = "3684c9633e398e13e4e29c9443a78574"; // Remplacez par votre propre clé API
-console.log(localStorage.getItem("coordonnees"));
-async function obtenirMeteo() {
-  console.log("enter");
+async function obtenirMeteo(ville) {
   try {
+    console.log(ville.y);
     // Récupération des coordonnées actualisées du local storage
     var coordonnees = JSON.parse(localStorage.getItem("coordonnees"));
     const tabResponseApi = [];
-
     for (let i = 0; i < coordonnees.length; i++) {
-      var lat = coordonnees[i].y;
-      var lon = coordonnees[i].x;
-
+      if (ville == undefined) {
+        var lat = coordonnees[i].y;
+        var lon = coordonnees[i].x;
+      }
       // Requête à l'API
-      const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${cleApi}`;
+      const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat || ville.y}&lon=${lon || ville.x}&appid=${cleApi}`;
       const response = await fetch(url);
 
       if (!response.ok) {
@@ -28,17 +27,21 @@ async function obtenirMeteo() {
       tabResponseApi.push(meteoData);
     }
     // Mettre à jour le tableau coordonnees dans le localStorage
-    localStorage.setItem("coordonnees", JSON.stringify(coordonnees));
+    if(ville == undefined){
+      localStorage.setItem("coordonnees", JSON.stringify(coordonnees));
+      affichageMeteo(tabResponseApi[0]);
+    }else{
+      // const resultmetheo = await meteoData;
+      console.log(tabResponseApi);
+      return tabResponseApi;
+    }
 
-    affichageMeteo(tabResponseApi[0]);
   } catch (error) {
     console.error("Erreur lors de la requête :", error);
   }
 }
 
 function affichageMeteo(response) {
-  console.log(response);
-  var storage = localStorage.getItem("coordonnees");
   var paragraph = document.getElementById("p-info");
   var caard = document.getElementById("caard-meteo");
   var dateNow = new Date();

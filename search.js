@@ -76,47 +76,40 @@ search.addEventListener(
 // Écouter l'événement click
 button.addEventListener("click", async () => {
   const inputSearch = document.getElementById("search-input").value;
-  
+
   // Vérifier si le champ d'entrée n'est pas vide
   if (inputSearch.trim().length >= 3) {
     const coordonnees = await obtenirCoordonnees();
-    
+
     // Vérifier si les coordonnées sont disponibles
     if (coordonnees.length > 0) {
       localStorage.setItem("coordonnees", JSON.stringify(coordonnees));
     }
-
     setTimeout(obtenirMeteo, 50);
     setTimeout(ajoueMarquer, 150);
-    console.log("marqueurs ajoutés");
-    console.log(localStorage.getItem("coordonnees"));
   } else {
     // Gérer le cas où le champ d'entrée est vide
     console.log("Le champ d'entrée est vide.");
+
+    setTimeout(obtenirMeteo, 50);
+    setTimeout(ajoueMarquer, 150);
   }
-  setTimeout(obtenirMeteo, 50);
-  setTimeout(ajoueMarquer, 150);
-  console.log("marqueurs ajoutés");
-  console.log(localStorage.getItem("coordonnees"));
 });
 
 // Fonction pour obtenir les coordonnées de la ville
 async function obtenirCoordonnees(response) {
   const inputSearch = document.getElementById("search-input").value;
   const url = `https://api-adresse.data.gouv.fr/search/?q=${inputSearch || response}&type=municipality&autocomplete=1`;
-  if (inputSearch.length >= 3) {
+  if (inputSearch.length >= 3 || response.length > 0) {
     try {
       const response = await fetch(url);
       if (!response.ok) {
         throw new Error(`Erreur HTTP : ${response.status}`);
       }
-
       const data = await response.json();
 
-      console.log("il y a :" + data.features.length);
       if (data.features.length > 1) {
         const tabCoordonnees = [];
-        console.log(data);
         for (let i = 0; i < data.features.length; i++) {
           tabCoordonnees.push({
             label: data.features[i].properties.label,
@@ -124,29 +117,29 @@ async function obtenirCoordonnees(response) {
             y: data.features[i].geometry.coordinates[1],
           });
         }
-        // Stocker toutes les coordonnées dans le localStorage uniquement si le localStorage est vide
-        console.log("local = " + localStorage.getItem("coordonnees"));
-        console.log("input = " + inputSearch);
-        console.log("response = " + response);
-        if (
-          !localStorage.getItem("coordonnees") &&
-          inputSearch != "" &&
-          response.length == 0
-        ) {
+        if (!localStorage.getItem("coordonnees") && inputSearch != "" && response.length == 0) {
           console.log("je suis dans le if");
           localStorage.setItem("coordonnees", JSON.stringify(tabCoordonnees));
         }
         return tabCoordonnees;
-      } else {
+      } else if (data.features.length === 1) {  // Ajout de cette condition
         const coordonnees = {
-          label: data.features[i].properties.label,
+          label: data.features[0].properties.label,
           x: data.features[0].geometry.coordinates[0],
           y: data.features[0].geometry.coordinates[1],
         };
+
         localStorage.setItem("coordonnees", JSON.stringify(coordonnees));
+        return [coordonnees];
+      } else {
+        return []; // Retourner un tableau vide si aucune coordonnée n'est trouvée
       }
     } catch (error) {
       console.error("Erreur lors de la requête :", error);
+      return []; // En cas d'erreur, renvoyer un tableau vide
     }
+  } else {
+    console.log("Requête API échouée");
+    return [];
   }
 }
