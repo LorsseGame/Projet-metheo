@@ -1,38 +1,60 @@
 const cleApi = "3684c9633e398e13e4e29c9443a78574"; // Remplacez par votre propre clé API
 async function obtenirMeteo(ville) {
   try {
-    console.log(ville.y);
     // Récupération des coordonnées actualisées du local storage
     var coordonnees = JSON.parse(localStorage.getItem("coordonnees"));
     const tabResponseApi = [];
-    for (let i = 0; i < coordonnees.length; i++) {
-      if (ville == undefined) {
-        var lat = coordonnees[i].y;
-        var lon = coordonnees[i].x;
+    if(ville != undefined){
+      for (let i = 0; i < ville.length; i++) {
+        if (ville != undefined) {
+          var lat = ville[i].y;
+          var lon = ville[i].x;
+        }
+        
+        // Requête à l'API
+        const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${cleApi}`;
+        const response = await fetch(url);
+  
+        if (!response.ok) {
+          throw new Error(`Erreur HTTP : ${response.status}`);
+        }
+        // Ajouter les informations météorologiques à l'objet existant dans le tableau coordonnees
+        const meteoData = await response.json();
+  
+        tabResponseApi.push(meteoData);
       }
-      // Requête à l'API
-      const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat || ville.y}&lon=${lon || ville.x}&appid=${cleApi}`;
-      const response = await fetch(url);
-
-      if (!response.ok) {
-        throw new Error(`Erreur HTTP : ${response.status}`);
+    }else{
+      for (let i = 0; i < coordonnees.length; i++) {
+        if (ville == undefined) {
+          var lat = coordonnees[i].y;
+          var lon = coordonnees[i].x;
+        }
+        // Requête à l'API
+        const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${cleApi}`;
+        const response = await fetch(url);
+  
+        if (!response.ok) {
+          throw new Error(`Erreur HTTP : ${response.status}`);
+        }
+        // Ajouter les informations météorologiques à l'objet existant dans le tableau coordonnees
+        const meteoData = await response.json();
+        coordonnees[i].temperature = meteoData.main.temp;
+        coordonnees[i].humidity = meteoData.main.humidity;
+        coordonnees[i].wind = meteoData.wind.speed;
+        coordonnees[i].pressure = meteoData.main.pressure;
+        coordonnees[i].desc = meteoData.weather[0].main;
+  
+        tabResponseApi.push(meteoData);
       }
-      // Ajouter les informations météorologiques à l'objet existant dans le tableau coordonnees
-      const meteoData = await response.json();
-      coordonnees[i].temperature = meteoData.main.temp;
-      coordonnees[i].humidity = meteoData.main.humidity;
-      coordonnees[i].wind = meteoData.wind.speed;
-      coordonnees[i].pressure = meteoData.main.pressure;
-
-      tabResponseApi.push(meteoData);
     }
     // Mettre à jour le tableau coordonnees dans le localStorage
     if(ville == undefined){
+      console.log("pass if meteo")
       localStorage.setItem("coordonnees", JSON.stringify(coordonnees));
+      console.log(coordonnees)
       affichageMeteo(tabResponseApi[0]);
-    }else{
-      // const resultmetheo = await meteoData;
-      console.log(tabResponseApi);
+    }else{  
+      console.log("pass else meteo")
       return tabResponseApi;
     }
 

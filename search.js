@@ -86,7 +86,7 @@ button.addEventListener("click", async () => {
       localStorage.setItem("coordonnees", JSON.stringify(coordonnees));
     }
     setTimeout(obtenirMeteo, 50);
-    setTimeout(ajoueMarquer, 150);
+    setTimeout(ajoueMarquer, 1000);
   } else {
     // Gérer le cas où le champ d'entrée est vide
     console.log("Le champ d'entrée est vide.");
