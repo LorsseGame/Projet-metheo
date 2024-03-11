@@ -62,72 +62,73 @@ document.addEventListener("DOMContentLoaded", async () => {
         label: ville[j].label,
         x: ville[j].x,
         y: ville[j].y,
-      });  
+      });
     }
   }
   const resultMetheo = await obtenirMeteo(tabVilleMarker);
 
   // Exécuter la fonction au chargement de la page
   await ajoueMarquerVilleConnue(tabVilleMarker);
-
 });
 
 async function ajoueMarquerVilleConnue(villes) {
-  const tabStackPopup= [];
+  const tabStackPopup = [];
   const clusterMarkers = L.markerClusterGroup();
   for (let i = 0; i < villes.length; i++) {
     const VilleCoordonees = await obtenirCoordonnees(villes[i].label);
     const resultMetheo = await obtenirMeteo(VilleCoordonees);
-
-    tabStackPopup.push({
-      label: VilleCoordonees[0].label,
-      temp: resultMetheo[0].main.temp,
-      hum: resultMetheo[0].main.humidity,
-      vent: resultMetheo[0].wind.speed,
-      pres: resultMetheo[0].main.pressure,
-      desc: resultMetheo[0].weather[0].main,
-      icon: resultMetheo[0].weather[0].icon,
-      y: VilleCoordonees[0].y,
-      x: VilleCoordonees[0].x,
-    });
-
+      tabStackPopup.push({
+        label: VilleCoordonees[0].label,
+        temp: resultMetheo[0].main.temp,
+        hum: resultMetheo[0].main.humidity,
+        vent: resultMetheo[0].wind.speed,
+        pres: resultMetheo[0].main.pressure,
+        desc: resultMetheo[0].weather[0].main,
+        icon: resultMetheo[0].weather[0].icon,
+        y: VilleCoordonees[0].y,
+        x: VilleCoordonees[0].x,
+      });
     // Vérifiez que les coordonnées sont définies avant d'ajouter un marqueur
     if (VilleCoordonees && tabStackPopup.length > 0) {
-  const marker =   L.marker([tabStackPopup[i].y, tabStackPopup[i].x]).bindPopup(
-      "Ville : " +
-      tabStackPopup[i].label +
-        "<br>" +
-        "température : " +
-        tabStackPopup[i].temp +
-        "°C" +
-        "<br>" +
-        "humidité : " +
-        tabStackPopup[i].hum +
-        "%" +
-        "<br>" +
-        "vent : " +
-        tabStackPopup[i].vent +
-        "km/h" +
-        "<br>" +
-        "pression : " +
-        tabStackPopup[i].pres +
-        "hPa" +
-        "<br>" +
-        "description : " +
-        tabStackPopup[i].desc +
-        "<br>" +
-        "icon : " +
-        tabStackPopup[i].icon +
-        "<br>" +
-        "latitude : " +
-        tabStackPopup[i].y +
-        "<br>" +
-        "longitude : " +
-        tabStackPopup[i].x
-    );
-    clusterMarkers.addLayer(marker);
+      const marker = L.marker([
+        tabStackPopup[i].y,
+        tabStackPopup[i].x,
+      ]).bindPopup(
+        "Ville : " +
+          tabStackPopup[i].label +
+          "<br>" +
+          "température : " +
+          tabStackPopup[i].temp +
+          "°C" +
+          "<br>" +
+          "humidité : " +
+          tabStackPopup[i].hum +
+          "%" +
+          "<br>" +
+          "vent : " +
+          tabStackPopup[i].vent +
+          "km/h" +
+          "<br>" +
+          "pression : " +
+          tabStackPopup[i].pres +
+          "hPa" +
+          "<br>" +
+          "description : " +
+          tabStackPopup[i].desc +
+          "<br>" +
+          "icon : " +
+          tabStackPopup[i].icon +
+          "<br>" +
+          "latitude : " +
+          tabStackPopup[i].y +
+          "<br>" +
+          "longitude : " +
+          tabStackPopup[i].x
+      );
+      clusterMarkers.addLayer(marker);
     }
   }
+
   map.addLayer(clusterMarkers);
 }
 

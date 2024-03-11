@@ -49,12 +49,10 @@ async function obtenirMeteo(ville) {
     }
     // Mettre à jour le tableau coordonnees dans le localStorage
     if(ville == undefined){
-      console.log("pass if meteo")
       localStorage.setItem("coordonnees", JSON.stringify(coordonnees));
       console.log(coordonnees)
       affichageMeteo(tabResponseApi[0]);
     }else{  
-      console.log("pass else meteo")
       return tabResponseApi;
     }
 
